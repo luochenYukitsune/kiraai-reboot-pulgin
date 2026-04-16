@@ -1,0 +1,14 @@
+{
+    "command_prefix": {
+        "name": "指令前缀",
+        "type": "string",
+        "default": "/reboot",
+        "hint": "触发清除上下文的指令，默认为 /reboot"
+    },
+    "verbose_log": {
+        "name": "详细日志",
+        "type": "switch",
+        "default": false,
+        "hint": "是否输出详细的调试日志"
+    }
+}

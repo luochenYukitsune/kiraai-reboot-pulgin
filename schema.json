@@ -5,6 +5,36 @@
         "default": "/reboot",
         "hint": "触发清除上下文的指令，默认为 /reboot"
     },
+    "enable_permission": {
+        "name": "启用权限控制",
+        "type": "switch",
+        "default": false,
+        "hint": "是否启用权限控制，启用后只有白名单用户可以执行"
+    },
+    "allowed_users": {
+        "name": "允许的用户ID",
+        "type": "list",
+        "default": [],
+        "hint": "允许执行清除上下文的用户ID列表，每行一个ID"
+    },
+    "success_message": {
+        "name": "成功反馈",
+        "type": "string",
+        "default": "✅ 已清除当前会话的上下文记忆，我们可以重新开始对话了！",
+        "hint": "清除成功时返回的消息"
+    },
+    "permission_denied_message": {
+        "name": "权限不足反馈",
+        "type": "string",
+        "default": "❌ 权限不足：您没有清除上下文的权限",
+        "hint": "权限不足时返回的消息"
+    },
+    "error_message": {
+        "name": "错误反馈",
+        "type": "string",
+        "default": "❌ 清除上下文失败: {error}",
+        "hint": "发生错误时返回的消息，可用 {error} 占位符显示错误信息"
+    },
     "verbose_log": {
         "name": "详细日志",
         "type": "switch",

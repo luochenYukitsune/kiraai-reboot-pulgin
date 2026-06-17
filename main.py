@@ -38,7 +38,7 @@ class RebootPlugin(BasePlugin):
 
     def _log(self, msg: str):
         if self.verbose_log:
-            logger.info(f"[Reboot] {msg}")
+            logger.debug(f"[Reboot] {msg}")
 
     def _get_sid(self, event) -> str:
         """获取会话 ID"""
@@ -74,12 +74,11 @@ class RebootPlugin(BasePlugin):
         """检查用户是否有权限执行"""
         if not self.enable_permission:
             return True
-        
-        user_id = self._get_user_id(event)
-        
+
         if not self.allowed_users:
-            return True
-        
+            return False
+
+        user_id = self._get_user_id(event)
         return user_id in self.allowed_users
 
     async def _clear_session_context(self, sid: str) -> str:
@@ -87,7 +86,7 @@ class RebootPlugin(BasePlugin):
         try:
             self._log(f"正在清除会话上下文: {sid}")
             
-            if self.ctx.session_mgr is None:
+            if getattr(self.ctx, 'session_mgr', None) is None:
                 return "❌ 错误：会话管理器不可用"
             
             self.ctx.session_mgr.delete_session(sid)
@@ -121,24 +120,23 @@ class RebootPlugin(BasePlugin):
             
             if not self._check_permission(event):
                 self._log(f"权限拒绝: 用户 {user_id} 无权执行")
-                await self.ctx.message_processor.send_message_chain(
-                    session=sid, 
-                    chain=MessageChain([Text(self.permission_denied_message)])
-                )
                 event.discard(force=True)
                 event.stop()
+                await self.ctx.message_processor.send_message_chain(
+                    session=sid,
+                    chain=MessageChain([Text(self.permission_denied_message)])
+                )
                 return
             
             result = await self._clear_session_context(sid)
             
             self._log(f"清除成功: {user_name}({user_id})")
-            
-            await self.ctx.message_processor.send_message_chain(
-                session=sid, 
-                chain=MessageChain([Text(result)])
-            )
             event.discard(force=True)
             event.stop()
+            await self.ctx.message_processor.send_message_chain(
+                session=sid,
+                chain=MessageChain([Text(result)])
+            )
             
         except Exception as e:
             logger.error(f"[Reboot] 处理指令失败: {e}")

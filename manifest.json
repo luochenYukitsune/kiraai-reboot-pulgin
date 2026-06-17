@@ -2,7 +2,7 @@
     "display_name": "上下文重置",
     "plugin_id": "reboot_plugin",
     "version": "1.0.0",
-    "author": "KiraAI",
+    "author": "luochenyukitsune",
     "description": "清除当前会话的上下文记忆，支持自然语言调用和 /reboot 指令",
-    "repo": null
+    "repo": "https://github.com/luochenYukitsune/kiraai-reboot-pulgin"
 }
